@@ -8,7 +8,7 @@
 #Get the input parameter to search for
 #puts "Search for?"
 #input = gets.chomp
-input = "iioi58pt"
+input = "red"
 
 #Check if matches should be displayed or only count should be done
 #puts "Display for search results? Y/N/U (Yes / No / Unique values only)"
@@ -16,26 +16,54 @@ input = "iioi58pt"
 display = "n"
 display = display.downcase
 
-#create an array where search results will be added
-array = Array.new
+#method to search through a logfile. input a username, output timestamp & matching username
+def search(input)
+	#create an array where search results will be added
+	search_output = Array.new
 
-#Open the file
-file = File.new("sso12.txt", "r")
+	#Open the file
+	file = File.new("test.txt", "r")
 
+	linecount=0
+	while (line = file.gets)
+		linecount += 1
 
-linecount=0
-while (line = file.gets)
-	linecount += 1
-	if username = /(username=[^&]*)/.match(line)
-		array.push username
+		if line.include? input
+			username = /(username=[^&]*)/.match(line)
+			time = /(timestamp=[0-9]*)/.match(line)
+			search_output.push [[username], [time]]       
+	  	else
+	 	end
+	end
+
+	#Print results (if found) otherwise print no match
+	if search_output.count == 0
+		search_output = "No match found"
 	else
 	end
+
+	#Close the file
+	file.close
+
+	return search_output 
 end
 
-string = ""
-array.each do |usernames|
-	string = string + usernames.to_s + " "
+def search_results(input)
+
+	words = input.split(" ")
+	frequencies = Hash.new(0)
+	words.each { |word| frequencies[word] += 1 }
+	frequencies.each { |word, frequency| puts word + " " + frequency.to_s }
+
 end
+
+
+
+puts search_results("pol lop pol lop pol")
+
+=begin
+
+	
 
 strings = string.split(" ")
 
@@ -54,7 +82,6 @@ puts test.map {|row| row[1]}
 #puts linecount
 #puts array.count
 
-=begin
 linecount = 0
 #Go through the whole file
 while (line = file.gets)
@@ -105,6 +132,3 @@ puts "Unique search count: #{test.uniq.count}"
 puts "Duplicate search count: #{array.count - array.uniq.count}"
 puts ""
 =end
-
-#Close the file
-file.close
